@@ -33,7 +33,7 @@ The dataset to be used in this webinar is a CSV file named `airbnb.csv`, which c
 ## **Getting started**
 
 
-```python
+```
 # Import libraries
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -44,7 +44,7 @@ import datetime as dt
 ```
 
 
-```python
+```
 # Read in the dataset
 airbnb = pd.read_csv('https://raw.githubusercontent.com/kflisikowsky/Descriptive_Statistics/refs/heads/main/data/airbnb.csv', index_col = 'Unnamed: 0')
 ```
@@ -65,7 +65,7 @@ Some important and common methods needed to get a better understanding of DataFr
 - `sns.histplot()` plots the distribution of one column in your DataFrame.
 
 
-```python
+```
 # Print the header of the DataFrame
 airbnb.head()
 ```
@@ -236,7 +236,7 @@ _Text/categorical data problems:_
 - **Problem 6**: Looking at `room_type`, let's replace those values to make them `'Shared Room'`, `'Private Home/Apartment'`, `'Private Room'` and `'Hotel Room'`.
 
 
-```python
+```
 # Print data types of DataFrame
 airbnb.dtypes
 ```
@@ -267,7 +267,7 @@ airbnb.dtypes
 Printing the data types confirms that `coordinates` and `price` need to be converted to `float`, and date columns need to be converted to `datetime` _(**problems 1,2 3)**_
 
 
-```python
+```
 # Print info of DataFrame
 airbnb.info()
 ```
@@ -302,7 +302,7 @@ Printing the info confirms our hunch about the following:
 - There is missing data in the `price`, `last_review`, `reviews_per_month`, `rating`, `number_of_stays`, `5_stars` columns. It also seems that the missingness of `last_review`, `reviews_per_month`, `rating`, `number_of_stays`, `5_stars` are related since they have the same amount of missing data. We will confirm later with `missingno` _(**problem 4**)_.
 
 
-```python
+```
 # Print number of missing values
 airbnb.isna().sum()
 ```
@@ -338,7 +338,7 @@ There are a variety of ways of dealing with missing data that is dependent on ty
 - Impute based on business assumptions of our data
 
 
-```python
+```
 # Print description of DataFrame
 airbnb.describe()
 ```
@@ -476,7 +476,7 @@ airbnb.describe()
 It's worth noting that `.describe()` does not offer a bird's eye view of all the out of range data we have, for example, what if we have date data in the future? Or given our dataset, `listing_added` dates that are in the future of `last_review` dates?
 
 
-```python
+```
 # Visualize the distribution of the rating column
 sns.histplot(airbnb['rating'], kde=True, bins = 20)
 plt.title('Distribution of listing ratings')
@@ -490,7 +490,7 @@ plt.show()
 
 
 
-```python
+```
 # Find number of unique values in room_type column
 airbnb['room_type'].unique()
 ```
@@ -509,7 +509,7 @@ airbnb['room_type'].unique()
 - **Problem 8**: There are trailing spaces and capitalization issues with `room_type`, we need to fix this problem.
 
 
-```python
+```
 # How many values of different room_types do we have?
 airbnb['room_type'].value_counts()
 ```
@@ -530,7 +530,7 @@ airbnb['room_type'].value_counts()
 
 
 
-```python
+```
 airbnb['price'].head(5)
 ```
 
@@ -587,7 +587,7 @@ _Is that all though?_
 ### Data type problems
 
 
-```python
+```
 # Reminder of the DataFrame
 airbnb.head()
 ```
@@ -742,7 +742,7 @@ To perform this task, we will use the following methods:
 - `.astype()` lets you convert a column from one type to another
 
 
-```python
+```
 airbnb['coordinates'] = airbnb['coordinates'].str.strip("()")
 airbnb[['latitude', 'longitude']] = airbnb['coordinates'].str.split(", ", n = 1, expand = True)
 airbnb[['latitude', 'longitude']] = airbnb[['latitude', 'longitude']].astype(float)
@@ -778,7 +778,7 @@ airbnb.info()
 
 
 
-```python
+```
 print(airbnb[['latitude', 'longitude']].isna().sum())
 ```
 
@@ -795,7 +795,7 @@ To perform this task, we will be using the following methods:
 - `.astype()`
 
 
-```python
+```
 # Remove $ from price before conversion to float
 airbnb['price'] = airbnb['price'].str.strip("$")
 # Print header to make sure change was done
@@ -815,7 +815,7 @@ airbnb['price'].head()
 
 
 
-```python
+```
 # Convert price to float
 airbnb['price'] = airbnb['price'].astype('float')
 # Calculate mean of price after conversion
@@ -829,7 +829,7 @@ print(airbnb['price'].isna().sum())
 
 
 
-```python
+```
 plt.figure(figsize=(10, 8))
 price_cat = [0, 100, 200, 300, 400, 500, 750, 1000, np.inf]
 airbnb['price_group'] = pd.cut(airbnb['price'], bins = price_cat)
@@ -853,7 +853,7 @@ To perform this task, we will use the following functions:
   - `format` takes in the desired date format `"%Y-%m-%d"`
 
 
-```python
+```
 # Print header of two columns
 airbnb[['listing_added', 'last_review']].head()
 ```
@@ -916,7 +916,7 @@ airbnb[['listing_added', 'last_review']].head()
 
 
 
-```python
+```
 airbnb['listing_added'] = pd.to_datetime(airbnb['listing_added'])
 airbnb['last_review'] = pd.to_datetime(airbnb['last_review'])
 print(airbnb[['last_review', 'listing_added']].isna().sum())
@@ -929,7 +929,7 @@ print(airbnb[['last_review', 'listing_added']].isna().sum())
 
 
 
-```python
+```
 airbnb.info()
 #There are all 10019 entries in database on: listing_id, host_id, price, last_review column needs further cleansing
 ```
@@ -972,7 +972,7 @@ To perform this task, we will be using the following methods:
 - `.replace()` to replace values in a column with another
 
 
-```python
+```
 # Print unique values of `room_type`
 airbnb['room_type'].unique()
 ```
@@ -989,7 +989,7 @@ airbnb['room_type'].unique()
 
 
 
-```python
+```
 # Deal with capitalized values
 airbnb['room_type'] = airbnb['room_type'].str.lower()
 airbnb['room_type'].unique()
@@ -1006,7 +1006,7 @@ airbnb['room_type'].unique()
 
 
 
-```python
+```
 # Deal with trailing spaces
 airbnb['room_type'] = airbnb['room_type'].str.strip()
 airbnb['room_type'].unique()
@@ -1022,7 +1022,7 @@ airbnb['room_type'].unique()
 
 
 
-```python
+```
 # Replace values to 'Shared room', 'Entire place', 'Private room' and 'Hotel room' (if applicable).
 mappings = {'private room': 'Private Room',
             'private': 'Private Room',
@@ -1047,7 +1047,7 @@ airbnb['room_type'].unique()
 ##### **Task 5:** Divide `neighbourhood_full` into 2 columns and making sure they are clean
 
 
-```python
+```
 # Print header of column
 airbnb['neighbourhood_full'].head()
 ```
@@ -1065,7 +1065,7 @@ airbnb['neighbourhood_full'].head()
 
 
 
-```python
+```
 airbnb[['borough', 'neighbourhood']] = airbnb['neighbourhood_full'].str.split(', ', expand=True)
 airbnb[['borough', 'neighbourhood']]
 ```
@@ -1161,7 +1161,7 @@ airbnb[['borough', 'neighbourhood']]
 ##### **Task 6:** Make sure we set the correct maximum for `rating` column out of range values
 
 
-```python
+```
 airbnb['rating'] = airbnb['rating'].clip(upper=5)
 airbnb['rating'].max()
 ```
@@ -1185,7 +1185,7 @@ The `missingno` (imported as `msno`) package is great for visualizing missing da
 - `plt.show()` to show the plot
 
 
-```python
+```
 # Visualize the missingness
 msno.matrix(airbnb)
 plt.show()
@@ -1200,7 +1200,7 @@ plt.show()
 Looking at the missingness matrix, we can see that missing values are almost identical between `last_review`, `reviews_per_month`, `rating`, `number_of_stays`, and `5_stars`. Let's confirm this further by sorting on `rating`.
 
 
-```python
+```
 # Visualize the missingness on sorted values
 msno.matrix(airbnb.sort_values(by = 'rating'))
 plt.show()
@@ -1213,7 +1213,7 @@ plt.show()
 
 
 
-```python
+```
 msno.dendrogram(airbnb)
 plt.show()
 ```
@@ -1225,7 +1225,7 @@ plt.show()
 
 
 
-```python
+```
 # Missingness barplot
 msno.bar(airbnb)
 ```
@@ -1246,7 +1246,7 @@ msno.bar(airbnb)
 **Treating the** `rating`, `number_of_stays`, `5_stars`, `reviews_per_month` **columns**
 
 
-```python
+```
 # Understand DataFrame with missing values in rating, number_of_stays, 5_stars, reviews_per_month
 airbnb[airbnb['rating'].isna()].describe()
 ```
@@ -1423,7 +1423,7 @@ airbnb[airbnb['rating'].isna()].describe()
 
 
 
-```python
+```
 # Understand DataFrame with missing values in rating, number_of_stays, 5_stars, reviews_per_month
 airbnb[~airbnb['rating'].isna()].describe()
 ```
@@ -1609,7 +1609,7 @@ We can impute them as following:
 
 
 
-```python
+```
 # Impute missing data
 airbnb = airbnb.fillna({'reviews_per_month':0,
                         'number_of_stays':0,
@@ -1623,7 +1623,7 @@ airbnb['is_rated'] = is_rated
 **Treating the** `price` **column**
 
 
-```python
+```
 # Investigate DataFrame with missing values in price
 airbnb[airbnb['price'].isna()].describe()
 ```
@@ -1809,7 +1809,7 @@ airbnb[airbnb['price'].isna()].describe()
 
 
 
-```python
+```
 # Investigate DataFrame with missing values in price
 airbnb[~airbnb['price'].isna()].describe()
 ```
@@ -2005,7 +2005,7 @@ From a common sense perspective, the most predictive factor for a room's price i
 
 
 
-```python
+```
 # Visualize relationship between price and room_type
 sns.boxplot(x = 'room_type', y = 'price', data = airbnb)
 plt.ylim(0, 400)
@@ -2021,7 +2021,7 @@ plt.show()
 
 
 
-```python
+```
 # Get median price per room_type
 airbnb.groupby('room_type')['price'].median()
 ```
@@ -2038,7 +2038,7 @@ airbnb.groupby('room_type')['price'].median()
 
 
 
-```python
+```
 # Impute price based on conditions
 airbnb.loc[(airbnb['price'].isna()) & (airbnb['room_type'] == 'Entire place'), 'price'] = 163.0
 airbnb.loc[(airbnb['price'].isna()) & (airbnb['room_type'] == 'Private Room'), 'price'] = 70.0
@@ -2046,7 +2046,7 @@ airbnb.loc[(airbnb['price'].isna()) & (airbnb['room_type'] == 'Shared Room'), 'p
 ```
 
 
-```python
+```
 # Confirm price has been imputed
 airbnb.isna().sum()
 ```
@@ -2089,13 +2089,13 @@ Albeit we've done a significant amount of data cleaning tasks, there are still a
 ##### **Task 8:** Do we have consistent date data?
 
 
-```python
+```
 # Doing some sanity checks on date data
 today = dt.date.today()
 ```
 
 
-```python
+```
 # Are there reviews in the future?
 airbnb['last_review'] = pd.to_datetime(airbnb['last_review'])
 airbnb[airbnb['last_review'].dt.date > today]
@@ -2154,7 +2154,7 @@ airbnb[airbnb['last_review'].dt.date > today]
 
 
 
-```python
+```
 # Are there listings in the future?
 airbnb['listing_added'] = pd.to_datetime(airbnb['listing_added'])
 airbnb[airbnb['listing_added'].dt.date > today]
@@ -2213,13 +2213,13 @@ airbnb[airbnb['listing_added'].dt.date > today]
 
 
 
-```python
+```
 # Drop these rows since they are only 4 rows
 airbnb = airbnb[~(airbnb['listing_added'].dt.date > today)]
 ```
 
 
-```python
+```
 # Are there any listings with listing_added > last_review
 inconsistent_dates = airbnb[airbnb['listing_added'].dt.date > airbnb['last_review'].dt.date]
 inconsistent_dates
@@ -2422,7 +2422,7 @@ inconsistent_dates
 
 
 
-```python
+```
 # Drop these rows since they are only 2 rows
 airbnb.drop(inconsistent_dates.index, inplace = True)
 ```
@@ -2444,7 +2444,7 @@ To diagnose, and deal with duplicate data, we will be using the following method
   
 
 
-```python
+```
 # Print the header of the DataFrame again
 airbnb.head()
 ```
@@ -2622,7 +2622,7 @@ airbnb.head()
 
 
 
-```python
+```
 # Find duplicates
 airbnb[airbnb.duplicated()]
 
@@ -2993,19 +2993,19 @@ airbnb[airbnb.duplicated()]
 
 
 
-```python
+```
 # Remove identical duplicates
 airbnb.drop_duplicates(inplace=True)
 ```
 
 
-```python
+```
 # Find non-identical duplicates
 duplicates = airbnb[airbnb.duplicated(subset=['listing_id'], keep=False)]
 ```
 
 
-```python
+```
 # Show all duplicates
 duplicates.sort_values('listing_id')
 ```
@@ -3415,7 +3415,7 @@ Dictionaries are useful data structures in Python with the following format
 ```
 
 
-```python
+```
 agg_dict = {col: 'first' for col in airbnb.columns if col != 'listing_id'}
 
 agg_dict['price'] = 'mean'
@@ -3424,3 +3424,693 @@ agg_dict['listing_added'] = 'max'
 
 airbnb = airbnb.groupby('listing_id').agg(agg_dict).reset_index()
 ```
+
+# Data Visualization
+
+# Univariate Analysis
+
+
+### STD, CV, IQR deviation
+
+
+```
+from scipy.stats import iqr, variation
+
+airbnb2 = airbnb[airbnb['price'] > 0].copy()
+airbnb2['log_price'] = np.log(airbnb2['price'])
+
+log_std = airbnb2['log_price'].std()
+normal_std = airbnb2['price'].std()
+
+print("STD (log) = ", log_std)
+print("normal STD = ", normal_std)
+print("----------------")
+
+log_cv = variation(airbnb2['log_price'])
+normal_cv = variation(airbnb2['price'])
+
+print("CV (log) =" , log_cv)
+print("normal CV =" , normal_cv)
+print("----------------")
+
+log_iqr = iqr(airbnb2['log_price'])
+normal_iqr = iqr(airbnb2['price'])
+
+print("IQR (log) =" , log_iqr)
+print("normal IQR =" , normal_iqr)
+print("----------------")
+
+plt.figure(figsize=(12, 6))
+
+plt.hist(airbnb2['log_price'], bins=50, edgecolor='black', alpha=0.7)
+
+mean_log = airbnb2['log_price'].mean()
+median_log = airbnb2['log_price'].median()
+
+q1_log = np.percentile(airbnb2['log_price'], 25)
+q3_log = np.percentile(airbnb2['log_price'], 75)
+
+plt.axvline(q1_log, linestyle="-.", color="red", label="Q1 (25%) / Start IQR")
+plt.axvline(q3_log, linestyle="-.", color="red", label="Q3 (75%) / End IQR")
+
+plt.axvline(mean_log - log_std, linestyle="solid", color="green", label="-1 STD")
+plt.axvline(mean_log + log_std, linestyle="solid", color="green", label="+1 STD")
+
+plt.xlim(2.5, 7) #This is optional
+plt.xlabel("Log(Price)")
+plt.ylabel("Number of Listings")
+plt.title("Histogram of Log-Transformed Airbnb Prices with STD and IQR")
+
+plt.legend()
+plt.show()
+```
+
+    STD (log) =  0.6856615662906987
+    normal STD =  202.30174892152783
+    ----------------
+    CV (log) = 0.14482332940046416
+    normal CV = 1.3419702248537082
+    ----------------
+    IQR (log) = 0.9162907318741551
+    normal IQR = 105.0
+    ----------------
+
+
+
+    
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_94_1.png)
+    
+
+
+### Price Analysis (STD, IQR, CV)
+
+**1.(Interquartile Range - IQR)**
+* The purple lines representing the IQR capture the exact "middle 50%" of all listings.
+* This is the most reliable pricing zone for a typical guest at NY.
+
+**2.(Standard Deviation - STD)**
+* The green lines (±1 STD) show the typical spread of prices. In a normal distribution, about 68% of the entire market.
+
+**3.(Variation - CV)**
+CV measures the relative volatility of the market (Standard Deviation divided by the Mean).
+* Lower CV in log-transformed model shows that after limiting extreme price deviations from luxury apartments, the market is quite stable and predictable
+
+
+```
+
+airbnb_ratings = airbnb.dropna(subset=['rating']).copy()
+
+rating_std = airbnb_ratings['rating'].std()
+print("STD (rating) = ", rating_std)
+print("----------------")
+
+rating_cv = variation(airbnb_ratings['rating'])
+print("CV (rating) =" , rating_cv)
+print("----------------")
+
+rating_iqr = iqr(airbnb_ratings['rating'])
+print("IQR (rating) =" , rating_iqr)
+print("----------------")
+
+plt.figure(figsize=(12, 6))
+
+plt.hist(airbnb_ratings['rating'], bins=30, edgecolor='black', alpha=0.7, color='lightblue')
+
+mean_rating = airbnb_ratings['rating'].mean()
+median_rating = airbnb_ratings['rating'].median()
+
+q1_rating = np.percentile(airbnb_ratings['rating'], 25)
+q3_rating = np.percentile(airbnb_ratings['rating'], 75)
+
+plt.axvline(q1_rating, linestyle="-.", color="red", linewidth=2, label="Q1 (25%) / Start IQR")
+plt.axvline(q3_rating, linestyle="-.", color="red", linewidth=2, label="Q3 (75%) / End IQR")
+
+plt.axvline(mean_rating - rating_std, linestyle="solid", color="green", linewidth=2, label="-1 STD")
+plt.axvline(mean_rating + rating_std, linestyle="solid", color="green", linewidth=2, label="+1 STD")
+
+plt.axvline(mean_rating, linestyle="dotted", color="blue", linewidth=2, label="Mean")
+
+plt.xlim(3, 5)
+
+plt.xlabel("Rating")
+plt.ylabel("Number of Listings")
+plt.title("Histogram of Airbnb Ratings with STD and IQR")
+
+plt.legend()
+
+plt.show()
+```
+
+    STD (rating) =  0.5748473913050418
+    ----------------
+    CV (rating) = 0.14320607358892462
+    ----------------
+    IQR (rating) = 0.995061388278029
+    ----------------
+
+
+
+    
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_96_1.png)
+    
+
+
+### Rating Analysis (STD, IQR, CV)
+
+**1.(Interquartile Range - IQR)**
+* The purple lines representing the IQR capture the exact "middle 50%" of all listings.
+* This is the most common range for all ratings here it falls between 3.5 and 4.5 rating.
+
+**2.(Standard Deviation - STD)**
+* The green lines (±1 STD) show the typical spread of ratings. In a normal distribution, about 68% of the entire market.
+* Here we can see that STD and IQR lines are quite simillar.
+
+**3.(Variation - CV)**
+CV measures the relative volatility of the market (Standard Deviation divided by the Mean).
+* CV of ratings is very low even without log, or other transformations this means that ratings are mostly evenly spread.
+
+### Skewness and Kurtosis
+
+
+```
+from scipy.stats import skew, kurtosis
+airbnb2 = airbnb[airbnb['price'] > 0].copy()
+airbnb2['log_price'] = np.log(airbnb2['price'])
+
+log_skew = airbnb2['log_price'].skew()
+print("skewness (log) = ", log_skew)
+print("normal skewness = ", airbnb2['price'].skew())
+
+print("----------------")
+
+log_kurt = airbnb2['log_price'].kurt()
+normal_kurt = airbnb2['price'].kurt()
+print("kurtosis (log) =" , log_kurt)
+print("normal kurtosis =" , normal_kurt)
+
+print("----------------")
+
+for i in range(1, 10):
+    price = np.exp(i)
+    print(f"Log Price {i} = ${price:.2f}")
+
+
+plt.hist(airbnb2['log_price'], bins=50, edgecolor='black', alpha=0.7)
+plt.axvline(airbnb2['log_price'].mean(), linestyle="dotted", color="blue", label="mean")
+plt.axvline(airbnb2['log_price'].median(), linestyle="dashed", color="red", label="median")
+
+plt.xlabel("Log(Price)")
+plt.ylabel("Number of Listings")
+plt.title("Histogram of Log-Transformed Airbnb Prices")
+plt.legend()
+plt.show()
+```
+
+    skewness (log) =  0.5351989317412219
+    normal skewness =  14.745352090803319
+    ----------------
+    kurtosis (log) = 1.123632055606397
+    normal kurtosis = 381.9915329359383
+    ----------------
+    Log Price 1 = $2.72
+    Log Price 2 = $7.39
+    Log Price 3 = $20.09
+    Log Price 4 = $54.60
+    Log Price 5 = $148.41
+    Log Price 6 = $403.43
+    Log Price 7 = $1096.63
+    Log Price 8 = $2980.96
+    Log Price 9 = $8103.08
+
+
+
+    
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_99_1.png)
+    
+
+
+
+A log value of **4.7** corresponds to an actual price of approximately **\$110** ($e^{4.7}$).
+This indicates that the **typical listing price** in our dataset is around \$110.
+
+**Market Range:** The vast majority of the market operates within the price range of **\$55** ($e^4$) to **\$400** ($e^6$).
+
+### Log Transformation
+
+* **Skewness (Balance):** It dropped from **14.7** to **0.53**.
+  The original data was completely lopsided because of a few super expensive listings.
+  Now, the data is balanced, and the average price sits nicely in the middle.
+
+* **Kurtosis (Outliers):** It dropped from a **382** down to **1.12**.
+  The data now forms a smooth, predictable bell curve that is safe to use.
+
+### Summary statistics
+
+summary statistics i cross-sectional analysis Maacina
+
+
+```
+airbnb.head(10)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>listing_id</th>
+      <th>name</th>
+      <th>host_id</th>
+      <th>host_name</th>
+      <th>neighbourhood_full</th>
+      <th>room_type</th>
+      <th>price</th>
+      <th>number_of_reviews</th>
+      <th>last_review</th>
+      <th>reviews_per_month</th>
+      <th>...</th>
+      <th>rating</th>
+      <th>number_of_stays</th>
+      <th>5_stars</th>
+      <th>listing_added</th>
+      <th>latitude</th>
+      <th>longitude</th>
+      <th>price_group</th>
+      <th>borough</th>
+      <th>neighbourhood</th>
+      <th>is_rated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3831</td>
+      <td>Cozy Entire Floor of Brownstone</td>
+      <td>4869</td>
+      <td>LisaRoxanne</td>
+      <td>Brooklyn, Clinton Hill</td>
+      <td>Entire place</td>
+      <td>89.0</td>
+      <td>270</td>
+      <td>2019-07-05</td>
+      <td>4.64</td>
+      <td>...</td>
+      <td>3.273935</td>
+      <td>324.0</td>
+      <td>0.757366</td>
+      <td>2018-12-30</td>
+      <td>40.68514</td>
+      <td>-73.95976</td>
+      <td>(0.0, 100.0]</td>
+      <td>Brooklyn</td>
+      <td>Clinton Hill</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>6848</td>
+      <td>Only 2 stops to Manhattan studio</td>
+      <td>15991</td>
+      <td>Allen &amp; Irina</td>
+      <td>Brooklyn, Williamsburg</td>
+      <td>Entire place</td>
+      <td>140.0</td>
+      <td>148</td>
+      <td>2019-06-29</td>
+      <td>1.20</td>
+      <td>...</td>
+      <td>3.495760</td>
+      <td>177.6</td>
+      <td>0.789743</td>
+      <td>2018-12-24</td>
+      <td>40.70837</td>
+      <td>-73.95352</td>
+      <td>(100.0, 200.0]</td>
+      <td>Brooklyn</td>
+      <td>Williamsburg</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7322</td>
+      <td>Chelsea Perfect</td>
+      <td>18946</td>
+      <td>Doti</td>
+      <td>Manhattan, Chelsea</td>
+      <td>Private Room</td>
+      <td>140.0</td>
+      <td>260</td>
+      <td>2019-07-01</td>
+      <td>2.12</td>
+      <td>...</td>
+      <td>4.389051</td>
+      <td>312.0</td>
+      <td>0.669873</td>
+      <td>2018-12-26</td>
+      <td>40.74192</td>
+      <td>-73.99501</td>
+      <td>(100.0, 200.0]</td>
+      <td>Manhattan</td>
+      <td>Chelsea</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7726</td>
+      <td>Hip Historic Brownstone Apartment with Backyard</td>
+      <td>20950</td>
+      <td>Adam And Charity</td>
+      <td>Brooklyn, Crown Heights</td>
+      <td>Entire place</td>
+      <td>99.0</td>
+      <td>53</td>
+      <td>2019-06-22</td>
+      <td>4.44</td>
+      <td>...</td>
+      <td>3.305382</td>
+      <td>63.6</td>
+      <td>0.640251</td>
+      <td>2018-12-17</td>
+      <td>40.67592</td>
+      <td>-73.94694</td>
+      <td>(0.0, 100.0]</td>
+      <td>Brooklyn</td>
+      <td>Crown Heights</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>12303</td>
+      <td>1bdr w private bath. in lofty apt</td>
+      <td>47618</td>
+      <td>Yolande</td>
+      <td>Brooklyn, Fort Greene</td>
+      <td>Private Room</td>
+      <td>120.0</td>
+      <td>25</td>
+      <td>2018-09-30</td>
+      <td>0.23</td>
+      <td>...</td>
+      <td>4.568745</td>
+      <td>30.0</td>
+      <td>0.918593</td>
+      <td>2018-03-27</td>
+      <td>40.69673</td>
+      <td>-73.97584</td>
+      <td>(100.0, 200.0]</td>
+      <td>Brooklyn</td>
+      <td>Fort Greene</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>12627</td>
+      <td>Entire apartment in central Brooklyn neighborh...</td>
+      <td>49670</td>
+      <td>Rana</td>
+      <td>Brooklyn, Prospect-Lefferts Gardens</td>
+      <td>Entire place</td>
+      <td>150.0</td>
+      <td>11</td>
+      <td>2019-06-05</td>
+      <td>0.49</td>
+      <td>...</td>
+      <td>3.759328</td>
+      <td>13.2</td>
+      <td>0.701220</td>
+      <td>2018-11-30</td>
+      <td>40.65944</td>
+      <td>-73.96238</td>
+      <td>(100.0, 200.0]</td>
+      <td>Brooklyn</td>
+      <td>Prospect-Lefferts Gardens</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>13394</td>
+      <td>Fort Greene brownstone</td>
+      <td>52335</td>
+      <td>Alexander</td>
+      <td>Brooklyn, Fort Greene</td>
+      <td>Private Room</td>
+      <td>80.0</td>
+      <td>135</td>
+      <td>2019-06-17</td>
+      <td>1.16</td>
+      <td>...</td>
+      <td>4.050714</td>
+      <td>162.0</td>
+      <td>0.625558</td>
+      <td>2018-12-12</td>
+      <td>40.69142</td>
+      <td>-73.97376</td>
+      <td>(0.0, 100.0]</td>
+      <td>Brooklyn</td>
+      <td>Fort Greene</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>14322</td>
+      <td>Beautiful Apartment in Manhattan!!!</td>
+      <td>56284</td>
+      <td>Francesca</td>
+      <td>Manhattan, Kips Bay</td>
+      <td>Entire place</td>
+      <td>200.0</td>
+      <td>19</td>
+      <td>2019-03-25</td>
+      <td>0.22</td>
+      <td>...</td>
+      <td>4.824159</td>
+      <td>22.8</td>
+      <td>0.911031</td>
+      <td>2018-09-19</td>
+      <td>40.73961</td>
+      <td>-73.98074</td>
+      <td>(100.0, 200.0]</td>
+      <td>Manhattan</td>
+      <td>Kips Bay</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>15338</td>
+      <td>Room in Greenpoint Loft w/ Roof</td>
+      <td>32169</td>
+      <td>Andrea</td>
+      <td>Brooklyn, Greenpoint</td>
+      <td>Private Room</td>
+      <td>49.0</td>
+      <td>138</td>
+      <td>2019-06-04</td>
+      <td>1.19</td>
+      <td>...</td>
+      <td>4.922277</td>
+      <td>165.6</td>
+      <td>0.896401</td>
+      <td>2018-11-29</td>
+      <td>40.72401</td>
+      <td>-73.93788</td>
+      <td>(0.0, 100.0]</td>
+      <td>Brooklyn</td>
+      <td>Greenpoint</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>15711</td>
+      <td>2 bedroom - Upper East Side-great for kids</td>
+      <td>61491</td>
+      <td>D</td>
+      <td>Manhattan, Upper East Side</td>
+      <td>Entire place</td>
+      <td>250.0</td>
+      <td>66</td>
+      <td>2019-03-30</td>
+      <td>0.57</td>
+      <td>...</td>
+      <td>3.483935</td>
+      <td>79.2</td>
+      <td>0.719796</td>
+      <td>2018-09-24</td>
+      <td>40.77065</td>
+      <td>-73.95269</td>
+      <td>(200.0, 300.0]</td>
+      <td>Manhattan</td>
+      <td>Upper East Side</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>10 rows × 21 columns</p>
+</div>
+
+
+
+
+```
+from scipy.stats import skew, kurtosis
+from tabulate import tabulate
+
+def markdown_summary(df, round_decimals=3):
+    summary = df.describe().T
+    summary['Skewness'] = df.skew()
+    summary['Kurtosis'] = df.kurt()
+    summary = summary.round(round_decimals)
+    return tabulate(summary, headers='keys', tablefmt='github')
+
+quantitative = airbnb.select_dtypes(include='number')
+
+print(markdown_summary(quantitative))
+```
+
+    |                   |   count |          mean |           std |      min |           25% |           50% |           75% |            max |   Skewness |   Kurtosis |
+    |-------------------|---------|---------------|---------------|----------|---------------|---------------|---------------|----------------|------------|------------|
+    | listing_id        |    9993 |   1.92713e+07 |   1.09498e+07 | 3831     |   9.67023e+06 |   2.00563e+07 |   2.93203e+07 |    3.64872e+07 |     -0.119 |     -1.216 |
+    | host_id           |    9993 |   6.79426e+07 |   7.86195e+07 | 2787     |   7.89777e+06 |   3.16299e+07 |   1.07434e+08 |    2.74103e+08 |      1.199 |      0.145 |
+    | price             |    9993 | 150.712       | 202.293       |    0     |  70           | 110           | 175           | 8000           |     14.745 |    381.992 |
+    | number_of_reviews |    9993 |  22.473       |  43.201       |    0     |   1           |   5           |  22           |  510           |      3.627 |     17.847 |
+    | reviews_per_month |    9993 |   1.074       |   1.541       |    0     |   0.04        |   0.37        |   1.55        |   16.22        |      2.256 |      6.885 |
+    | availability_365  |    9993 | 112.299       | 131.65        |    0     |   0           |  44           | 226           |  365           |      0.773 |     -0.985 |
+    | rating            |    7922 |   4.014       |   0.575       |    3.001 |   3.52        |   4.028       |   4.515       |    5           |     -0.041 |     -1.194 |
+    | number_of_stays   |    9993 |  26.968       |  51.841       |    0     |   1.2         |   6           |  26.4         |  612           |      3.627 |     17.847 |
+    | 5_stars           |    9993 |   0.57        |   0.3         |    0     |   0.612       |   0.682       |   0.75        |    0.95        |     -1.229 |     -0.133 |
+    | latitude          |    9993 |  40.729       |   0.055       |   40.509 |  40.69        |  40.723       |  40.763       |   40.913       |      0.239 |      0.147 |
+    | longitude         |    9993 | -73.952       |   0.046       |  -74.24  | -73.983       | -73.955       | -73.936       |  -73.719       |      1.382 |      5.085 |
+    | is_rated          |    9993 |   0.793       |   0.405       |    0     |   1           |   1           |   1           |    1           |     -1.445 |      0.087 |
+
+
+
+```
+important_columns = ['price', 'number_of_reviews', 'rating', 'is_rated']  # we dont want to calculate mean of for example room id
+group_summary = airbnb.groupby('room_type')[important_columns].describe().round(2).T
+print(group_summary)
+```
+
+    room_type                Entire place  Private Room  Shared room
+    price             count       5172.00       4595.00       226.00
+                      mean         208.67         89.31        72.90
+                      std          249.27        102.04       127.99
+                      min            0.00          0.00        10.00
+                      25%          120.00         53.00        35.00
+                      50%          160.00         70.00        50.00
+                      75%          225.00         99.00        75.00
+                      max         8000.00       2850.00      1800.00
+    number_of_reviews count       5172.00       4595.00       226.00
+                      mean          22.69         22.58        15.40
+                      std           42.49         44.48        30.63
+                      min            0.00          0.00         0.00
+                      25%            1.00          1.00         1.00
+                      50%            5.00          5.00         4.00
+                      75%           22.00         23.00        17.00
+                      max          401.00        510.00       236.00
+    rating            count       4155.00       3597.00       170.00
+                      mean           4.02          4.01         3.98
+                      std            0.58          0.57         0.58
+                      min            3.00          3.00         3.00
+                      25%            3.52          3.52         3.46
+                      50%            4.03          4.03         4.00
+                      75%            4.52          4.51         4.43
+                      max            5.00          5.00         4.99
+    is_rated          count       5172.00       4595.00       226.00
+                      mean           0.80          0.78         0.75
+                      std            0.40          0.41         0.43
+                      min            0.00          0.00         0.00
+                      25%            1.00          1.00         1.00
+                      50%            1.00          1.00         1.00
+                      75%            1.00          1.00         1.00
+                      max            1.00          1.00         1.00
+
+
+Medians for number of reviews for Entire and Private are the same(5), and means are nearly identical (22,6). So despite being cheaper, Private rooms generate the same ammount of reviews as Entire places
+
+As for ratings - Medians are 4.03 (Entire), 4.03 (Private), and 4.00 (Shared). So price and privacy level have absolutely zero mathematical impact on overall guest satisfaction. A $70 room is rated identically to a $160 apartment.
+
+
+```
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.barplot(data=airbnb, x='room_type', y='price', estimator='median')
+plt.title('Price Median vs Room Type')
+plt.show()
+```
+
+
+    
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_107_0.png)
+    
+
+
+### Cross-sectional analysis
+
+
+
+```
+grouped_price = airbnb.groupby('is_rated')['price']
+grouped_summary = grouped_price.describe()
+# let's add skewness and kurtosis now:
+grouped_summary['Skewness'] = grouped_price.apply(lambda x: x.skew())
+grouped_summary['Kurtosis'] = grouped_price.apply(lambda x: x.kurt())
+from tabulate import tabulate
+print(tabulate(grouped_summary, headers='keys', tablefmt='github'))  #summary in markdown table now
+```
+
+    |   is_rated |   count |    mean |     std |   min |   25% |   50% |   75% |   max |   Skewness |   Kurtosis |
+    |------------|---------|---------|---------|-------|-------|-------|-------|-------|------------|------------|
+    |          0 |    2071 | 189.553 | 308.788 |     0 |    70 |   120 |   200 |  5250 |    8.53237 |    98.0249 |
+    |          1 |    7922 | 140.558 | 161.884 |     0 |    69 |   109 |   169 |  8000 |   20.3327  |   822.542  |
+
+
+
+```
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+sns.boxplot(data=airbnb, x='is_rated', y='price', ax=axes[0])
+axes[0].set_ylim(0, 500)
+axes[0].set_title('Boxplot: Price Distribution by Rating Status')
+axes[0].set_xlabel('is_rated (0 = No Rating, 1 = Has Rating)')
+axes[0].set_ylabel('Price ($)')
+
+sns.histplot(data=airbnb, x='price', hue='is_rated', kde=True, bins=50, alpha=0.5, ax=axes[1])
+axes[1].set_xlim(0, 500)
+axes[1].set_title('Histogram & Density: Price Skewness')
+axes[1].set_xlabel('Price ($)')
+axes[1].set_ylabel('Number of Listings')
+
+plt.tight_layout()
+plt.show()
+```
+
+
+    
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_110_0.png)
+    
+
+
+Oferts with no ratings are usualy more expensive
+
+The cheapest apartments generate more revievs due to the fact that many customers visit them, we can see the peak of the ammount around 100$
+
+Even though most places cost around $100, there are a handful of super expensive mansions or penthouses (we can see them as outliers on the boxplot). Because these few places are so expensive, they mess up the normal "average" price. That's why we use the "median" (the exact middle price) to get a true picture of the market.
