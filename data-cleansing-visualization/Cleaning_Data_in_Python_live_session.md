@@ -3427,6 +3427,12 @@ airbnb = airbnb.groupby('listing_id').agg(agg_dict).reset_index()
 
 # Data Visualization
 
+Janka
+
+Kuby
+
+Maacina
+
 # Univariate Analysis
 
 
@@ -3498,7 +3504,7 @@ plt.show()
 
 
     
-![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_94_1.png)
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_97_1.png)
     
 
 
@@ -3571,7 +3577,7 @@ plt.show()
 
 
     
-![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_96_1.png)
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_99_1.png)
     
 
 
@@ -3645,7 +3651,7 @@ plt.show()
 
 
     
-![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_99_1.png)
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_102_1.png)
     
 
 
@@ -4056,7 +4062,7 @@ plt.show()
 
 
     
-![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_107_0.png)
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_110_0.png)
     
 
 
@@ -4105,7 +4111,7 @@ plt.show()
 
 
     
-![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_110_0.png)
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_113_0.png)
     
 
 
@@ -4114,3 +4120,364 @@ Oferts with no ratings are usualy more expensive
 The cheapest apartments generate more revievs due to the fact that many customers visit them, we can see the peak of the ammount around 100$
 
 Even though most places cost around $100, there are a handful of super expensive mansions or penthouses (we can see them as outliers on the boxplot). Because these few places are so expensive, they mess up the normal "average" price. That's why we use the "median" (the exact middle price) to get a true picture of the market.
+
+# Bivariate Statistics
+
+### Calculating Pearson coefficients
+
+#### Correlation between price and rating
+
+
+```
+from scipy.stats import pearsonr
+
+cleaned_airbnb = airbnb[airbnb['rating'].notna() & (airbnb['price'] > 0)].copy()
+
+cleaned_airbnb['log_price'] = np.log(cleaned_airbnb['price'])
+
+r_coefficient, p_value = pearsonr(cleaned_airbnb['log_price'], cleaned_airbnb['rating'])
+
+print(f"Pearson correlation coefficient (r): {r_coefficient}")
+print(f"P-value: {p_value}")
+```
+
+    Pearson correlation coefficient (r): 0.00065779989215936
+    P-value: 0.9533225183197294
+
+
+With coefficient equal to 0.0006, there is zero linear relationship between the price and rating.
+
+#### Correlation between price and number of stays
+
+
+```
+r_coefficient, p_value = pearsonr(cleaned_airbnb['number_of_stays'], cleaned_airbnb['log_price'])
+
+print(f"Pearson correlation coefficient (r): {r_coefficient}")
+print(f"P-value: {p_value}")
+```
+
+    Pearson correlation coefficient (r): -0.02090649576939544
+    P-value: 0.06280240804020572
+
+
+Nearly no correlation either.
+
+#### Correlation between availability and number of 5 stars
+
+
+```
+r_coefficient, p_value = pearsonr(cleaned_airbnb['availability_365'], cleaned_airbnb['5_stars'])
+
+print(f"Pearson correlation coefficient (r): {r_coefficient}")
+print(f"P-value: {p_value}")
+```
+
+    Pearson correlation coefficient (r): 0.037350573170814014
+    P-value: 0.000884704121913773
+
+
+Still nothing relevant. In this data set there are no two columns that show significant correlation using **Pearson’s correlation coefficient** except for *number of reviews* and *number of stays*.
+
+### Contingency Table
+
+
+### The contingency table perfectly illustrates the division between the two areas. Harlem attract budget-conscious travelers, whereas the Upper East Side is structured around a mid-to-high-end market.
+
+
+```
+neighbourhood = ['Upper East Side', 'Harlem']
+
+df_filtered = airbnb2[airbnb2['neighbourhood'].isin(neighbourhood)]
+
+table = pd.crosstab(
+    index=df_filtered['price_group'],
+    columns=df_filtered['neighbourhood'],
+    margins=True,
+    margins_name="Sum"
+)
+
+table
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>neighbourhood</th>
+      <th>Harlem</th>
+      <th>Upper East Side</th>
+      <th>Sum</th>
+    </tr>
+    <tr>
+      <th>price_group</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>(0.0, 100.0]</th>
+      <td>308</td>
+      <td>87</td>
+      <td>395</td>
+    </tr>
+    <tr>
+      <th>(100.0, 200.0]</th>
+      <td>184</td>
+      <td>189</td>
+      <td>373</td>
+    </tr>
+    <tr>
+      <th>(200.0, 300.0]</th>
+      <td>37</td>
+      <td>65</td>
+      <td>102</td>
+    </tr>
+    <tr>
+      <th>(300.0, 400.0]</th>
+      <td>6</td>
+      <td>17</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <th>(400.0, 500.0]</th>
+      <td>0</td>
+      <td>2</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>(500.0, 750.0]</th>
+      <td>4</td>
+      <td>4</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>(750.0, 1000.0]</th>
+      <td>0</td>
+      <td>5</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>(1000.0, inf]</th>
+      <td>1</td>
+      <td>3</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>Sum</th>
+      <td>540</td>
+      <td>372</td>
+      <td>912</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```
+from scipy.stats import chi2_contingency
+# Perform Chi-Square test
+clean_table = table.iloc[:-1, :-1]
+
+chi2, p_value, dof, expected = chi2_contingency(clean_table)
+
+print(f"Chi-Square Statistic: {chi2:.4f}")
+print(f"p-value: {p_value:.4f}")
+print(f"Degrees of Freedom: {dof}")
+```
+
+    Chi-Square Statistic: 117.7092
+    p-value: 0.0000
+    Degrees of Freedom: 7
+
+
+A Chi-Square test of independence was performed to examine the relation between neighborhood (Harlem vs. Upper East Side) and Airbnb price groups. The relation between these variables was significant, $\chi^2$ (7, N = 912) = 117.71, $p < .001$. This mathematically confirms that the pricing structure is highly dependent on the neighborhood, with Harlem catering significantly more to the budget market and the Upper East Side dominating the mid-to-high-tier market.
+
+### First Step into Kendall, Spearman analysis
+First of all, we will present Kendall and spearman correlation table to find good canditates for **Closer Analysis**
+
+### Calculating Spearman, Kendall coefficients
+
+
+```
+from scipy.stats import kendalltau, spearmanr
+corr_spearman = airbnb.corr(method='spearman', numeric_only=True)
+
+# Set up the matplotlib figure
+plt.figure(figsize=(10, 8))
+
+# Create a heatmap
+sns.heatmap(corr_spearman,
+            annot=True,         # Show correlation coefficients
+            fmt=".2f",          # Format for coefficients
+            cmap="coolwarm",    # Color palette
+            vmin=-1, vmax=1,    # Fixed scale
+            square=True,        # Make cells square
+            linewidths=0.5,     # Line width between cells
+            cbar_kws={"shrink": .75})  # Colorbar shrink
+
+# Title and layout
+plt.title("Spearman Correlation Heatmap", fontsize=16)
+plt.tight_layout()
+
+# Show plot
+plt.show()
+```
+
+
+    
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_133_0.png)
+    
+
+
+
+```
+corr_kendall = airbnb.corr(method='kendall', numeric_only=True)
+
+# Set up the matplotlib figure
+plt.figure(figsize=(10, 8))
+
+# Create a heatmap
+sns.heatmap(corr_kendall,
+            annot=True,         # Show correlation coefficients
+            fmt=".2f",          # Format for coefficients
+            cmap="Spectral",    # Color palette
+            vmin=-1, vmax=1,    # Fixed scale
+            square=True,        # Make cells square
+            linewidths=0.5,     # Line width between cells
+            cbar_kws={"shrink": .75})  # Colorbar shrink
+
+# Title and layout
+plt.title("Kendall Correlation Heatmap", fontsize=16)
+plt.tight_layout()
+
+# Show plot
+plt.show()
+```
+
+
+    
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_134_0.png)
+    
+
+
+# What can we see?
+After looking at the charts, we can see that there are few obvious correlations
+For example Pairs: **(number of stays - reviews per month)** , **(number of stays - number of reviews)** and maybe less obvious one: **(number of stays - 5 stars)**
+We will take a closer look into:
+ - **5 stars - number of stays**
+ - **number of stay - reviews per month**
+
+
+## 5 Stars - Number Of Stays
+
+
+```
+
+spearman_coef, spearman_p = spearmanr(airbnb['number_of_stays'], airbnb['5_stars'])
+kendall_coef, kendall_p = kendalltau(airbnb['number_of_stays'], airbnb['5_stars'])
+
+plt.figure(figsize=(10, 6))
+
+sns.kdeplot(
+    x='number_of_stays',
+    y='5_stars',
+    data=airbnb,
+    fill=True,
+    thresh=0.05,
+    levels=15,
+    cmap='Blues'
+)
+
+plt.xlim(0, 80)
+
+plt.title('5 Stars - Num of stays correlation', fontsize=14)
+plt.xlabel('Number Of Stays', fontsize=12)
+plt.ylabel('Number of 5 Star Reviews', fontsize=12)
+plt.grid(True, linestyle=':', alpha=0.6)
+
+plt.show()
+
+print(f"Spearman Correlation:  = {spearman_coef:.4f}")
+print(f"p-value Spearman = {spearman_p}")
+print(f"Kendall Correlation  = {kendall_coef:.4f}")
+print(f"p-value Kendall  = {kendall_p}")
+```
+
+
+    
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_137_0.png)
+    
+
+
+    Spearman Correlation:  = 0.5989
+    p-value Spearman = 0.0
+    Kendall Correlation  = 0.4370
+    p-value Kendall  = 0.0
+
+
+## Number Of Stays - Reviews Per Month
+
+
+```
+spearman_coef, spearman_p = spearmanr(airbnb['number_of_stays'], airbnb['reviews_per_month'])
+kendall_coef, kendall_p = kendalltau(airbnb['number_of_stays'], airbnb['reviews_per_month'])
+
+plt.figure(figsize=(10, 6))
+
+sns.regplot(
+    x='number_of_stays',
+    y='reviews_per_month',
+    data=airbnb,
+    scatter_kws={'alpha': 0.8, 's': 15, 'color': 'green'},
+    line_kws={'color': 'red', 'linewidth': 2, 'label': 'Trend Line'}
+)
+
+plt.xlim(0, 80)
+plt.ylim(0, 8)
+
+plt.title('Reviews Per Month - Num of stays correlation', fontsize=14)
+plt.xlabel('Number Of Stays', fontsize=12)
+plt.ylabel('Reviews Per Month', fontsize=12)
+plt.grid(True, linestyle=':', alpha=0.6)
+plt.legend()
+
+plt.show()
+
+print(f"Spearman Correlation:  = {spearman_coef:.4f}")
+print(f"p-value Spearman = {spearman_p}")
+print(f"Kendall Correlation  = {kendall_coef:.4f}")
+print(f"p-value Kendall  = {kendall_p}")
+```
+
+
+    
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_139_0.png)
+    
+
+
+    Spearman Correlation:  = 0.8470
+    p-value Spearman = 0.0
+    Kendall Correlation  = 0.6905
+    p-value Kendall  = 0.0
+
