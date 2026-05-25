@@ -74,6 +74,7 @@ airbnb.head()
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -85,6 +86,7 @@ airbnb.head()
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -345,6 +347,7 @@ airbnb.describe()
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -356,6 +359,7 @@ airbnb.describe()
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -592,6 +596,7 @@ airbnb.head()
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -603,6 +608,7 @@ airbnb.head()
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -856,6 +862,7 @@ airbnb[['listing_added', 'last_review']].head()
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -867,6 +874,7 @@ airbnb[['listing_added', 'last_review']].head()
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1066,6 +1074,7 @@ airbnb[['borough', 'neighbourhood']]
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1077,6 +1086,7 @@ airbnb[['borough', 'neighbourhood']]
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1245,6 +1255,7 @@ airbnb[airbnb['rating'].isna()].describe()
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1256,6 +1267,7 @@ airbnb[airbnb['rating'].isna()].describe()
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1420,6 +1432,7 @@ airbnb[~airbnb['rating'].isna()].describe()
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1431,6 +1444,7 @@ airbnb[~airbnb['rating'].isna()].describe()
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1618,6 +1632,7 @@ airbnb[airbnb['price'].isna()].describe()
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1629,6 +1644,7 @@ airbnb[airbnb['price'].isna()].describe()
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1802,6 +1818,7 @@ airbnb[~airbnb['price'].isna()].describe()
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1813,6 +1830,7 @@ airbnb[~airbnb['price'].isna()].describe()
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -2087,6 +2105,7 @@ airbnb[airbnb['last_review'].dt.date > today]
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2098,6 +2117,7 @@ airbnb[airbnb['last_review'].dt.date > today]
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -2144,6 +2164,7 @@ airbnb[airbnb['listing_added'].dt.date > today]
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2155,6 +2176,7 @@ airbnb[airbnb['listing_added'].dt.date > today]
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -2207,6 +2229,7 @@ inconsistent_dates
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2218,6 +2241,7 @@ inconsistent_dates
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -2429,6 +2453,7 @@ airbnb.head()
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2440,6 +2465,7 @@ airbnb.head()
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -2606,6 +2632,7 @@ airbnb[airbnb.duplicated()]
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2617,6 +2644,7 @@ airbnb[airbnb.duplicated()]
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -2986,6 +3014,7 @@ duplicates.sort_values('listing_id')
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -2997,6 +3026,7 @@ duplicates.sort_values('listing_id')
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -3647,6 +3677,7 @@ airbnb.head(10)
 
 
 <div>
+<style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -3658,6 +3689,7 @@ airbnb.head(10)
     .dataframe thead th {
         text-align: right;
     }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
