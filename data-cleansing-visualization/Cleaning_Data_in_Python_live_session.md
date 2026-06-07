@@ -4121,7 +4121,7 @@ The cheapest apartments generate more revievs due to the fact that many customer
 
 Even though most places cost around $100, there are a handful of super expensive mansions or penthouses (we can see them as outliers on the boxplot). Because these few places are so expensive, they mess up the normal "average" price. That's why we use the "median" (the exact middle price) to get a true picture of the market.
 
-# Bivariate Statistics
+# Bivariate Analysis
 
 ### Calculating Pearson coefficients
 
@@ -4141,8 +4141,8 @@ print(f"Pearson correlation coefficient (r): {r_coefficient}")
 print(f"P-value: {p_value}")
 ```
 
-    Pearson correlation coefficient (r): 0.00065779989215936
-    P-value: 0.9533225183197294
+    Pearson correlation coefficient (r): 0.0006577998921593626
+    P-value: 0.9533225183197302
 
 
 With coefficient equal to 0.0006, there is zero linear relationship between the price and rating.
@@ -4157,8 +4157,8 @@ print(f"Pearson correlation coefficient (r): {r_coefficient}")
 print(f"P-value: {p_value}")
 ```
 
-    Pearson correlation coefficient (r): -0.02090649576939544
-    P-value: 0.06280240804020572
+    Pearson correlation coefficient (r): -0.020906495769395447
+    P-value: 0.06280240804020594
 
 
 Nearly no correlation either.
@@ -4174,7 +4174,7 @@ print(f"P-value: {p_value}")
 ```
 
     Pearson correlation coefficient (r): 0.037350573170814014
-    P-value: 0.000884704121913773
+    P-value: 0.0008847041219137483
 
 
 Still nothing relevant. In this data set there are no two columns that show significant correlation using **Pearson’s correlation coefficient** except for *number of reviews* and *number of stays*.
@@ -4481,3 +4481,198 @@ print(f"p-value Kendall  = {kendall_p}")
     Kendall Correlation  = 0.6905
     p-value Kendall  = 0.0
 
+
+# Regression Analysis
+
+## Looking at Data
+
+**First** of all we will show the *kendall correlation heatmap* again to find good canditates for our model
+
+
+
+## Adding new Parameter
+
+To make our analysis more fun I have added a new column: **distance to manhattan**, which also has some impact on price which we will further examine
+
+
+
+```
+def Calcdistance(lat1, lon1, lat2, lon2):
+    R = 6371.0
+
+    lat1_rad = np.radians(lat1)
+    lon1_rad = np.radians(lon1)
+    lat2_rad = np.radians(lat2)
+    lon2_rad = np.radians(lon2)
+
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+
+    # Formula for calculating distance between any points on Earth using its radius and position of any 2 points
+    a = np.sin(dlat / 2)**2 + np.cos(lat1_rad) * np.cos(lat2_rad) * np.sin(dlon / 2)**2
+    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
+
+    distance = R * c
+    return distance
+
+manhattan_lat = 40.7589
+manhattan_lon = -73.9851
+
+airbnb['distance_to_manhattan'] = Calcdistance(
+    airbnb['latitude'],
+    airbnb['longitude'],
+    manhattan_lat,
+    manhattan_lon
+)
+```
+
+**Correlation Heatmap:**
+
+
+```
+corr_kendall = airbnb.corr(method='kendall', numeric_only=True)
+
+# Set up the matplotlib figure
+plt.figure(figsize=(10, 8))
+
+# Create a heatmap
+sns.heatmap(corr_kendall,
+            annot=True,         # Show correlation coefficients
+            fmt=".2f",          # Format for coefficients
+            cmap="Spectral",    # Color palette
+            vmin=-1, vmax=1,    # Fixed scale
+            square=True,        # Make cells square
+            linewidths=0.5,     # Line width between cells
+            cbar_kws={"shrink": .75})  # Colorbar shrink
+
+# Title and layout
+plt.title("Kendall Correlation Heatmap", fontsize=16)
+plt.tight_layout()
+
+# Show plot
+plt.show()
+```
+
+
+    
+![png](Cleaning_Data_in_Python_live_session_files/Cleaning_Data_in_Python_live_session_145_0.png)
+    
+
+
+## Choosing candidates
+We can see that we have few possibly good correlations after looking at the correlation heatmap, but we will take
+a closer look into these pairs:
+ - **5 stars -> number of stays + reviews per month**
+ - **price -> longitude + Distance from Manhattan**
+
+## First Model
+**5 stars -> number of stays + reviews per month**
+
+
+```
+import statsmodels.api as sm
+
+Y = airbnb['5_stars']
+X = airbnb[['number_of_stays', 'price']]
+
+X = sm.add_constant(X)
+
+model = sm.OLS(Y, X).fit()
+print(model.summary())
+```
+
+                                OLS Regression Results                            
+    ==============================================================================
+    Dep. Variable:                5_stars   R-squared:                       0.093
+    Model:                            OLS   Adj. R-squared:                  0.093
+    Method:                 Least Squares   F-statistic:                     512.2
+    Date:                Sun, 07 Jun 2026   Prob (F-statistic):          1.76e-212
+    Time:                        20:46:01   Log-Likelihood:                -1655.6
+    No. Observations:                9993   AIC:                             3317.
+    Df Residuals:                    9990   BIC:                             3339.
+    Df Model:                           2                                         
+    Covariance Type:            nonrobust                                         
+    ===================================================================================
+                          coef    std err          t      P>|t|      [0.025      0.975]
+    -----------------------------------------------------------------------------------
+    const               0.5433      0.004    139.212      0.000       0.536       0.551
+    number_of_stays     0.0017   5.52e-05     30.316      0.000       0.002       0.002
+    price              -0.0001   1.41e-05     -8.771      0.000      -0.000   -9.63e-05
+    ==============================================================================
+    Omnibus:                     1395.530   Durbin-Watson:                   1.800
+    Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1955.031
+    Skew:                          -1.067   Prob(JB):                         0.00
+    Kurtosis:                       2.621   Cond. No.                         345.
+    ==============================================================================
+    
+    Notes:
+    [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+
+## Second Model
+**price -> longitude + Distance from Manhattan**
+
+
+```
+
+Y = airbnb['price']
+X = airbnb[['longitude', 'distance_to_manhattan']]
+
+X = sm.add_constant(X)
+
+model = sm.OLS(Y, X).fit()
+print(model.summary())
+```
+
+                                OLS Regression Results                            
+    ==============================================================================
+    Dep. Variable:                  price   R-squared:                       0.044
+    Model:                            OLS   Adj. R-squared:                  0.044
+    Method:                 Least Squares   F-statistic:                     232.3
+    Date:                Sun, 07 Jun 2026   Prob (F-statistic):           2.49e-99
+    Time:                        20:46:01   Log-Likelihood:                -67012.
+    No. Observations:                9993   AIC:                         1.340e+05
+    Df Residuals:                    9990   BIC:                         1.341e+05
+    Df Model:                           2                                         
+    Covariance Type:            nonrobust                                         
+    =========================================================================================
+                                coef    std err          t      P>|t|      [0.025      0.975]
+    -----------------------------------------------------------------------------------------
+    const                 -2.728e+04   3813.938     -7.154      0.000   -3.48e+04   -1.98e+04
+    longitude              -371.6498     51.545     -7.210      0.000    -472.688    -270.611
+    distance_to_manhattan    -6.9375      0.533    -13.022      0.000      -7.982      -5.893
+    ==============================================================================
+    Omnibus:                    19619.827   Durbin-Watson:                   1.952
+    Prob(Omnibus):                  0.000   Jarque-Bera (JB):         71817861.446
+    Skew:                          15.507   Prob(JB):                         0.00
+    Kurtosis:                     417.152   Cond. No.                     1.43e+05
+    ==============================================================================
+    
+    Notes:
+    [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+    [2] The condition number is large, 1.43e+05. This might indicate that there are
+    strong multicollinearity or other numerical problems.
+
+
+## Analysis
+All models ended up being *quite weak*, we don't have enough data to train a strong model, but we can take some assumptions after looking at the results:
+**First Model**
+- R-squared: 0.093
+- F-statistic: 0.000
+- number_of_stays, coef: 0.0017
+- price, coef: -0.0001
+- Skew: -1.067
+
+**Second Model**
+- R-squared: 0.044
+- F-statistic: 0.000
+- distance_to_manhattan, coef: -6.94
+- longitude, coef: -371.65)
+- Kurtosis: 417.15
+- Skewness: 15.5
+
+Both models have quite low predictability **(9.3% and 4.4%)** , but we can take few conclusions from these results:
+
+**1.** Although first model coefficients are quite weak, second model shows that every killometer way from Manhattann decresase price by roughly **7$** and estates to the east of New York are cheaper
+
+**2.** Left Skewness for **5-star** ratings shows _Reputation Inflation_ which means that reviewers leave above avarage number of 5-star reviews _(probably because of good maners)_, and classic **Enourmous** Kurtosis and Skewness vales for second model where extremely pricy apartments destroy the trend line _(need to examine log_price)_
